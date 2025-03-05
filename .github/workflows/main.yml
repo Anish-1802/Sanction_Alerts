@@ -1,17 +1,17 @@
-name: Monitor Websites for Name Changes
+name: Send Alerts
 
 on:
-  schedule:
-    - cron: '0 0 * * *'  # This schedules the workflow to run once every day at midnight UTC
-  workflow_dispatch:  # Allows you to trigger the workflow manually from GitHub
+  push:
+    branches:
+      - main
 
 jobs:
-  monitor:
+  send_email:
     runs-on: ubuntu-latest
-
+    environment: Alerts  # Specify the environment you created
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2  # Check out the code in the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -20,9 +20,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          pip install -r requirements.txt
+          pip install python-dotenv
 
-      - name: Run the monitoring script
+      - name: Run the script
+        env:
+          OUTLOOK_EMAIL: ${{ secrets.OUTLOOK_EMAIL }}
+          OUTLOOK_PASSWORD: ${{ secrets.OUTLOOK_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: |
           python Alerts.py
