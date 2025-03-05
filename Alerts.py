@@ -3,68 +3,80 @@ from bs4 import BeautifulSoup
 import xml.etree.ElementTree as ET
 import smtplib
 from email.mime.text import MIMEText
+import os
 
 # Function to scrape individual terrorists list
 def scrape_individual_terrorists(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    names = []
-    
-    # Example logic to scrape names; adjust based on actual HTML structure
-    for item in soup.find_all('li'):  # Replace with actual tag/class to identify names
-        names.append(item.text.strip())
-
-    return names
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+        names = []
+        for item in soup.find_all('li'):  # Adjust tag/class
+            names.append(item.text.strip())
+        return names
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from {url}: {e}")
+        return []
 
 # Function to scrape terrorist organizations list
 def scrape_terrorist_organizations(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    names = []
-    
-    # Example logic to scrape organizations; adjust based on actual HTML structure
-    for item in soup.find_all('li'):  # Replace with actual tag/class to identify organizations
-        names.append(item.text.strip())
-
-    return names
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+        names = []
+        for item in soup.find_all('li'):  # Adjust tag/class
+            names.append(item.text.strip())
+        return names
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from {url}: {e}")
+        return []
 
 # Function to scrape unlawful associations list
 def scrape_unlawful_associations(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    names = []
-    
-    # Example logic to scrape associations; adjust based on actual HTML structure
-    for item in soup.find_all('li'):  # Replace with actual tag/class to identify associations
-        names.append(item.text.strip())
-
-    return names
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+        names = []
+        for item in soup.find_all('li'):  # Adjust tag/class
+            names.append(item.text.strip())
+        return names
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from {url}: {e}")
+        return []
 
 # Function to scrape the UN sanctions list (XML)
 def scrape_un_sanctions(xml_url):
-    response = requests.get(xml_url)
-    root = ET.fromstring(response.text)
-    names = []
-    
-    # Loop through XML to extract names of individuals/entities
-    for entity in root.findall('.//member'):  # Adjust based on XML structure
-        name = entity.find('name').text
-        if name:
-            names.append(name.strip())
-
-    return names
+    try:
+        response = requests.get(xml_url)
+        response.raise_for_status()
+        root = ET.fromstring(response.text)
+        names = []
+        for entity in root.findall('.//member'):  # Adjust based on XML structure
+            name = entity.find('name')
+            if name is not None:
+                names.append(name.text.strip())
+        return names
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from {xml_url}: {e}")
+        return []
 
 # Function to send email notifications
 def send_email(subject, body):
-    sender = 'anish.sawant3-v@adityabirlacapital.com'
-    recipient = 'anish.sawant3-v@adityabirlacapital.com'
+    sender = os.getenv('OUTLOOK_EMAIL')
+    recipient = os.getenv('RECIPIENT_EMAIL')
+    email_password = os.getenv('OUTLOOK_PASSWORD')
+
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = recipient
 
     with smtplib.SMTP('smtp.office365.com', 587) as server:
-        server.login(sender, 'Ronin@1802')
+        server.starttls()
+        server.login(sender, email_password)
         server.sendmail(sender, recipient, msg.as_string())
 
 # Compare current data with stored data and check for changes
@@ -79,15 +91,13 @@ def compare_and_notify(current_names, previous_names, source_name):
 
 # Main logic
 def main():
-    # URLs of websites
     urls = {
         "Individual Terrorists": "https://www.mha.gov.in/en/page/individual-terrorists-under-uapa",
         "Terrorist Organizations": "https://www.mha.gov.in/en/commoncontent/list-of-organisations-designated-%E2%80%98terrorist-organizations%E2%80%99-under-section-35-of",
         "Unlawful Associations": "https://www.mha.gov.in/en/commoncontent/unlawful-associations-under-section-3-of-unlawful-activities-prevention-act-1967",
-        "UN Sanctions List": "https://scsanctions.un.org/resources/xml/en/consolidated.xml?_gl=1*1qd0esu*_ga*MTc2NDQ4ODU2NS4xNzQxMDg5OTI3*_ga_TK9BQL5X7Z*MTc0MTE1NTM3MS4yLjAuMTc0MTE1NTM3MS4wLjAuMA.."
+        "UN Sanctions List": "https://scsanctions.un.org/resources/xml/en/consolidated.xml"
     }
 
-    # Scrape data from each URL and compare it with previous data
     for source_name, url in urls.items():
         if source_name == "UN Sanctions List":
             current_names = scrape_un_sanctions(url)
@@ -98,17 +108,14 @@ def main():
         else:
             current_names = scrape_unlawful_associations(url)
 
-        # Load previous names from a file (stored separately for each list)
         try:
             with open(f'previous_{source_name}.txt', 'r') as f:
                 previous_names = f.read().splitlines()
         except FileNotFoundError:
             previous_names = []
 
-        # Compare and notify if changes are found
         compare_and_notify(current_names, previous_names, source_name)
 
-        # Save the current names to file for next comparison
         with open(f'previous_{source_name}.txt', 'w') as f:
             f.write("\n".join(current_names))
 
