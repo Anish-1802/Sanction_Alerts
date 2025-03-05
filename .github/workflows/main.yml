@@ -1,4 +1,4 @@
-name: Test Gmail SMTP Authentication
+name: Test Gmail SMTP Authentication and Scrape
 
 on:
   push:
@@ -7,12 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  test_smtp_authentication:
+  test_smtp_authentication_and_scrape:
     runs-on: ubuntu-latest
 
     env:
-      OUTLOOK_EMAIL: ${{ secrets.GMAIL_EMAIL }}
-      OUTLOOK_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+      GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
       RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
 
     steps:
@@ -24,6 +24,11 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Run SMTP test script
+      - name: Install dependencies
         run: |
-          python test.py
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 smtplib
+
+      - name: Run SMTP test and scrape script
+        run: |
+          python smtp_test_script.py
