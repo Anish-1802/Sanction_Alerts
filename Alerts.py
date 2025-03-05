@@ -64,7 +64,7 @@ def send_email(subject, body):
     msg['To'] = recipient
 
     with smtplib.SMTP('smtp.example.com') as server:
-        server.login(sender, 'your_email_password')
+        server.login(sender, 'Ronin@1802')
         server.sendmail(sender, recipient, msg.as_string())
 
 # Compare current data with stored data and check for changes
