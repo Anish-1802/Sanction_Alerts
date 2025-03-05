@@ -12,42 +12,6 @@ sender = 'anishsawant18.as@gmail.com'  # This should be from GitHub Secrets
 recipient = 'anish.sawant3-v@outlook.com'  # This should be from GitHub Secrets
 email_password = 'kdlnygkkvmwluxky'  # This should be from GitHub Secrets
 
-# Function to scrape individual terrorists list
-def scrape_individual_terrorists(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    names = []
-
-    # Example logic to scrape names; adjust based on actual HTML structure
-    for item in soup.find_all('li'):  # Replace with actual tag/class to identify names
-        names.append(item.text.strip())
-
-    return names
-
-# Function to scrape terrorist organizations list
-def scrape_terrorist_organizations(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    names = []
-
-    # Example logic to scrape organizations; adjust based on actual HTML structure
-    for item in soup.find_all('li'):  # Replace with actual tag/class to identify organizations
-        names.append(item.text.strip())
-
-    return names
-
-# Function to scrape unlawful associations list
-def scrape_unlawful_associations(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    names = []
-
-    # Example logic to scrape associations; adjust based on actual HTML structure
-    for item in soup.find_all('li'):  # Replace with actual tag/class to identify associations
-        names.append(item.text.strip())
-
-    return names
-
 # Function to scrape the UN sanctions list (XML)
 def scrape_un_sanctions(xml_url):
     response = requests.get(xml_url)
