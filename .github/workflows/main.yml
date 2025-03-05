@@ -31,4 +31,4 @@ jobs:
 
       - name: Run SMTP test and scrape script
         run: |
-          python smtp_test_script.py
+          python Alerts.py
