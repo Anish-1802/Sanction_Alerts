@@ -63,7 +63,7 @@ def send_email(subject, body):
     msg['From'] = sender
     msg['To'] = recipient
 
-    with smtplib.SMTP('smtp.example.com') as server:
+    with smtplib.SMTP('smtp.office365.com', 587) as server:
         server.login(sender, 'Ronin@1802')
         server.sendmail(sender, recipient, msg.as_string())
 
