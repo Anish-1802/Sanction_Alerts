@@ -74,7 +74,7 @@ def send_email(subject, body):
     msg['From'] = sender
     msg['To'] = recipient
 
-    with smtplib.SMTP('smtp.office365.com', 587) as server:
+    with smtplib.SMTP('smtp.gmail.com', 465) as server:
         server.starttls()
         server.login(sender, email_password)
         server.sendmail(sender, recipient, msg.as_string())
