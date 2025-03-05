@@ -7,10 +7,10 @@ import xml.etree.ElementTree as ET
 # Enable debug-level logs
 logging.basicConfig(level=logging.DEBUG)
 
-# Set up sender and recipient emails directly in the code
-sender = 'anishsawant18.as@gmail.com'  # Your Gmail address
-recipient = 'anish.sawant3-v@outlook.com'  # The recipient's email address
-email_password = 'kdlnygkkvmwluxky'  # Your Gmail app password (generated via Gmail)
+# Set up sender and recipient emails
+sender = 'anishsawant18.as@gmail.com'  # This should be from GitHub Secrets
+recipient = 'anish.sawant3-v@outlook.com'  # This should be from GitHub Secrets
+email_password = 'kdlnygkkvmwluxky'  # This should be from GitHub Secrets
 
 # Function to scrape the UN sanctions list (XML)
 def scrape_un_sanctions(xml_url):
@@ -52,7 +52,11 @@ def compare_and_notify(current_names, previous_names, source_name):
     if additions or removals:
         subject = f"Name Changes Detected: {source_name}"
         body = f"Additions: {', '.join(additions)}\nRemovals: {', '.join(removals)}"
-        send_email(subject, body)
+    else:
+        subject = f"No Changes Detected: {source_name}"
+        body = f"No changes observed in the records of {source_name}."
+
+    send_email(subject, body)
 
 # Main logic
 def main():
