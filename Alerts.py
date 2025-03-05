@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Set up sender and recipient emails
 sender = 'anishsawant18.as@gmail.com'  # This should be from GitHub Secrets
-recipient = 'anish.sawant3-v@outlook.com'  # This should be from GitHub Secrets
+recipient = 'anish.sawant3-v@adityabirlacapital.com'  # This should be from GitHub Secrets
 email_password = 'kdlnygkkvmwluxky'  # This should be from GitHub Secrets
 
 # Function to scrape the UN sanctions list (XML)
