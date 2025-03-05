@@ -56,8 +56,8 @@ def scrape_un_sanctions(xml_url):
 
 # Function to send email notifications
 def send_email(subject, body):
-    sender = 'your_email@example.com'
-    recipient = 'recipient_email@example.com'
+    sender = 'anish.sawant3-v@adityabirlacapital.com'
+    recipient = 'anish.sawant3-v@adityabirlacapital.com'
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = sender
