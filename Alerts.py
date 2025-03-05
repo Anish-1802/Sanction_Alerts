@@ -58,9 +58,7 @@ def compare_and_notify(current_names, previous_names, source_name):
 def main():
     # URLs of websites
     urls = {
-        "Individual Terrorists": "https://www.mha.gov.in/en/page/individual-terrorists-under-uapa",
-        "Terrorist Organizations": "https://www.mha.gov.in/en/commoncontent/list-of-organisations-designated-%E2%80%98terrorist-organizations%E2%80%99-under-section-35-of",
-        "Unlawful Associations": "https://www.mha.gov.in/en/commoncontent/unlawful-associations-under-section-3-of-unlawful-activities-prevention-act-1967",
+        
         "UN Sanctions List": "https://scsanctions.un.org/resources/xml/en/consolidated.xml?_gl=1*1qd0esu*_ga*MTc2NDQ4ODU2NS4xNzQxMDg5OTI3*_ga_TK9BQL5X7Z*MTc0MTE1NTM3MS4yLjAuMTc0MTE1NTM3MS4wLjAuMA.."
     }
 
@@ -68,13 +66,7 @@ def main():
     for source_name, url in urls.items():
         if source_name == "UN Sanctions List":
             current_names = scrape_un_sanctions(url)
-        elif source_name == "Individual Terrorists":
-            current_names = scrape_individual_terrorists(url)
-        elif source_name == "Terrorist Organizations":
-            current_names = scrape_terrorist_organizations(url)
-        else:
-            current_names = scrape_unlawful_associations(url)
-
+        
         # Load previous names from a file (stored separately for each list)
         try:
             with open(f'previous_{source_name}.txt', 'r') as f:
