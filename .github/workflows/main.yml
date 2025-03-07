@@ -25,7 +25,7 @@ jobs:
           
       - name: Run the script
         run: |
-          python3 your_script.py
+          python3 Alerts.py
 
       - name: Commit and push previous data file
         run: |
